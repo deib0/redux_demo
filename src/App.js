@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import { useRef,useState } from "react"
 import store from "./redux/store"
+import {createDecreaseAction,createIncreaseAction} from './redux/count_action'
 
 function App(){
     const selectRef = useRef(null)
@@ -14,19 +15,19 @@ function App(){
     //     })
     // },[])
     const increase=()=>{
-        store.dispatch({type:'increase',number:selectRef.current.value})
+        createIncreaseAction(selectRef.current.value)
     }
     const decrease=()=>{
-        store.dispatch({type:'decrease',number:selectRef.current.value})
+        createDecreaseAction(selectRef.current.value)
     }
     const increaseIfOdd=()=>{
         if(store.getState()%2 !==0){
-            store.dispatch({type:'increase',number:selectRef.current.value})
+            createIncreaseAction(selectRef.current.value)
         }
     }
     const increaseAsync=()=>{
         setTimeout(() => {
-            store.dispatch({type:'increase',number:selectRef.current.value})
+            createIncreaseAction(selectRef.current.value)
         }, 1000);
     }
     return (
