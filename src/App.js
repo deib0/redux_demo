@@ -1,24 +1,46 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useRef,useState } from "react"
+import store from "./redux/store"
 
 function App(){
-    const [n,setN]=useState(0)
     const selectRef = useRef(null)
+    const [xxx,update]=useState(null)
+    console.log({...store})
+    console.log('store',store.getState())
+    // 订阅store的改动
+    // useEffect(()=>{
+    //     store.subscribe(()=>{
+    //         update({})
+    //     })
+    // },[])
     const increase=()=>{
-        setN(selectRef.current.value-0+n)
+        store.dispatch({type:'increase',number:selectRef.current.value})
+    }
+    const decrease=()=>{
+        store.dispatch({type:'decrease',number:selectRef.current.value})
+    }
+    const increaseIfOdd=()=>{
+        if(store.getState()%2 !==0){
+            store.dispatch({type:'increase',number:selectRef.current.value})
+        }
+    }
+    const increaseAsync=()=>{
+        setTimeout(() => {
+            store.dispatch({type:'increase',number:selectRef.current.value})
+        }, 1000);
     }
     return (
         <>
-        <div>{n}</div>
+        <div>{store.getState()}</div>
         <select ref={selectRef}>
             <option>1</option>
             <option>2</option>
             <option>3</option>
         </select>
         <button onClick={()=>increase()}>increase</button>&nbsp;
-        <button>decrease</button>&nbsp;
-        <button>increase if odd</button>&nbsp;
-        <button>increase async</button>&nbsp;
+        <button onClick={()=>decrease()}>decrease</button>&nbsp;
+        <button onClick={()=>increaseIfOdd()}>increase if odd</button>&nbsp;
+        <button onClick={()=>increaseAsync()}>increase async</button>&nbsp;
         </>
     )
 }
